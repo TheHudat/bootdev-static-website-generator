@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     child_node1 = HTMLNode('a', 'child_node1')
@@ -56,4 +56,40 @@ class TestHTMLNode(unittest.TestCase):
         'PROPS=( href="https://www.google.com" prop2="prop2 stuff"))'
         )
         self.assertEqual(node.__repr__(), solution)
+
+    def test_to_html_with_children(self):
+        child_node = LeafNode("span", "child")
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+    
+    def test_to_html_with_three_children(self):
+        child_node1 = LeafNode("a", "child1")
+        child_node2 = LeafNode("b", "child2")
+        child_node3 = LeafNode("c", "child3")
+        parent_node = ParentNode("div", [child_node1, child_node2, child_node3])
+        self.assertEqual(parent_node.to_html(), "<div><a>child1</a><b>child2</b><c>child3</c></div>")
+    
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        child_node = ParentNode("span", [grandchild_node])
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span><b>grandchild</b></span></div>",
+        )
+    
+    def test_to_html_with_two_grandchildren(self):
+        grandchild_node1 = LeafNode("b", "grandchild1")
+        child_node1 = ParentNode("span", [grandchild_node1])
+        grandchild_node2 = LeafNode("c", "grandchild2")
+        child_node2 = ParentNode("r", [grandchild_node2])
+        parent_node = ParentNode("div", [child_node1, child_node2])
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span><b>grandchild1</b></span><r><c>grandchild2</c></r></div>",
+        )
+    
+    def test_to_html_no_children(self):
+        parent_node = ParentNode("div", None)
+        self.assertRaises(ValueError, parent_node.to_html)
         

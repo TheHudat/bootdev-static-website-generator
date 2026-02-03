@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, text_node_to_html_node
 
 
 class TestTextNode(unittest.TestCase):
@@ -28,6 +28,26 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("I am text node text", TextType.LINK)
         node2 = TextNode("I am not text node text", TextType.LINK)
         self.assertNotEqual(node, node2)
+    
+    def test_to_html_text(self):
+        node = TextNode("This is a text node", TextType.TEXT)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, None)
+        self.assertEqual(html_node.value, "This is a text node")
+    
+    def test_to_html_image(self):
+        node = TextNode("alt text", TextType.IMAGE, "www.site.com")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "img")
+        self.assertEqual(html_node.value, "")
+        self.assertEqual(html_node.props, {"src":"www.site.com", "alt":"alt text"})
+
+    def test_to_html_link(self):
+        node = TextNode("Text node text", TextType.LINK, "www.site.com")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "a")
+        self.assertEqual(html_node.value, "Text node text")
+        self.assertEqual(html_node.props, {"href":"www.site.com"})
 
 
 if __name__ == "__main__":
