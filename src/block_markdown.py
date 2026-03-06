@@ -1,6 +1,8 @@
 from enum import Enum
 import re
 
+from htmlnode import HTMLNode
+
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
     HEADING = "heading"
@@ -25,9 +27,9 @@ def block_to_block_type(block):
         return BlockType.HEADING
     if len(lines) > 1 and lines[0].startswith("```") and lines[-1].startswith("```"):
         return BlockType.CODE
-    if re.match(r">|> ", block):
+    if re.match(r"> ?", block):
         for line in lines:
-            if not re.match(r">|> ", line):
+            if not re.match(r"> ?", line):
                 return BlockType.PARAGRAPH
         return BlockType.QUOTE
     if re.match("- ", block):
@@ -43,4 +45,3 @@ def block_to_block_type(block):
             i += 1
         return BlockType.ORDERED_LIST
     return BlockType.PARAGRAPH
-        

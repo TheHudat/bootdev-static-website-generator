@@ -3,8 +3,8 @@ import re
 from textnode import TextNode, TextType
 
 def text_to_textnodes(text):
-    start_node = TextNode(text, TextType.TEXT)
-    new_nodes = split_nodes_delimiter([start_node], "**", TextType.BOLD)
+    new_nodes = [TextNode(text, TextType.TEXT)]
+    new_nodes = split_nodes_delimiter(new_nodes, "**", TextType.BOLD)
     new_nodes = split_nodes_delimiter(new_nodes, "_", TextType.ITALIC)
     new_nodes = split_nodes_delimiter(new_nodes, "`", TextType.CODE)
     new_nodes = split_nodes_image(new_nodes)
