@@ -45,3 +45,6 @@ def block_to_block_type(block):
             i += 1
         return BlockType.ORDERED_LIST
     return BlockType.PARAGRAPH
+
+def extract_title(markdown):
+    return re.findall(r"(?<!#)# (.+)", markdown)[0]

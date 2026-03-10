@@ -3,7 +3,8 @@ import unittest
 from block_markdown import (
     BlockType, 
     block_to_block_type,
-    markdown_to_blocks
+    markdown_to_blocks,
+    extract_title
 ) 
 
 class TestBlockMarkdown(unittest.TestCase):
@@ -101,3 +102,20 @@ def a function
 > lines
 """
         self.assertEqual(block_to_block_type(quote.strip()), BlockType.QUOTE)
+
+    def test_extract_title(self):
+        md = """
+# The Title
+
+## line 2
+
+### line 3
+"""
+        self.assertEqual("The Title", extract_title(md))
+
+    def test_extract_title_one_line(self):
+        md = """
+# The Title 123 &^%%@#
+"""
+        self.assertEqual("The Title 123 &^%%@#", extract_title(md))
+
