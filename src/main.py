@@ -12,7 +12,7 @@ dir_path_blog = dir_path_content + "/blog"
 template_path = "./template.html"
 
 def main():
-    basepath = os.path.dirname(sys.argv[1])
+    basepath = os.path.dirname(sys.argv[1]) + "/"
 
     print("Deleting public directory...")
     if os.path.exists(dir_path_docs):
